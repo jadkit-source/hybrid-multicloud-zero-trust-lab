@@ -1,0 +1,28 @@
+# Credentials and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12
+*.key
+*.tfvars
+*.tfvars.json
+
+# Terraform state
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Sensitive evidence
+*token*
+*secret*
+*credential*
+*.har
+*.pcap
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
