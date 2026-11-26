@@ -26,3 +26,6 @@ crash.log
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Allow secretless architecture documentation
+!architecture/ADR-007-secretless-soar.md
