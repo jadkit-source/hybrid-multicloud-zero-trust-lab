@@ -7,8 +7,10 @@ locals {
       description  = "Detects resource operations denied by Azure Policy."
       query        = <<-KQL
         AzureActivity
+        | where ingestion_time() > ago(5m)
         | where OperationNameValue =~ "Microsoft.Authorization/policies/deny/action"
-        | project TimeGenerated, Caller, ResourceId,
+        | extend TargetResourceId = iff(isempty(ResourceId), _ResourceId, ResourceId)
+        | project TimeGenerated, Caller, TargetResourceId,
                   ActivityStatusValue, CorrelationId
       KQL
     }
@@ -20,12 +22,14 @@ locals {
       description  = "Detects successful Azure RBAC assignment changes."
       query        = <<-KQL
         AzureActivity
+        | where ingestion_time() > ago(5m)
         | where OperationNameValue in~ (
             "Microsoft.Authorization/roleAssignments/write",
             "Microsoft.Authorization/roleAssignments/delete"
           )
         | where ActivityStatusValue =~ "Success"
-        | project TimeGenerated, Caller, ResourceId,
+        | extend TargetResourceId = iff(isempty(ResourceId), _ResourceId, ResourceId)
+        | project TimeGenerated, Caller, TargetResourceId,
                   OperationNameValue, CorrelationId
       KQL
     }
@@ -37,12 +41,14 @@ locals {
       description  = "Detects successful network security rule changes."
       query        = <<-KQL
         AzureActivity
+        | where ingestion_time() > ago(5m)
         | where OperationNameValue in~ (
             "Microsoft.Network/networkSecurityGroups/securityRules/write",
             "Microsoft.Network/networkSecurityGroups/securityRules/delete"
           )
         | where ActivityStatusValue =~ "Success"
-        | project TimeGenerated, Caller, ResourceId,
+        | extend TargetResourceId = iff(isempty(ResourceId), _ResourceId, ResourceId)
+        | project TimeGenerated, Caller, TargetResourceId,
                   OperationNameValue, CorrelationId
       KQL
     }

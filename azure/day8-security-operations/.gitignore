@@ -6,3 +6,16 @@
 *.tfvars.json
 crash.log
 crash.*.log
+
+# Terraform sensitive local artifacts
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+# Raw security telemetry
+*.log
